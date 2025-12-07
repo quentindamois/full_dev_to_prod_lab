@@ -26,7 +26,8 @@ def test_check_pasword():
 def test__build_postgres_uri():
 
     db_url = os.environ.get("DATABASE_URL")
-    if db_url:
+    
+    if len(db_url) == 0:
         user = os.environ.get("POSTGRES_USER", "postgres")
         password = os.environ.get("POSTGRES_PASSWORD", "postgres")
         host = os.environ.get("POSTGRES_HOST", "localhost")
