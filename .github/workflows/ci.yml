@@ -40,4 +40,4 @@ jobs:
         pytest
     - name: build Docker Image
       run: |
-        run: docker build . --file Dockerfile --tag lab_image:$(date +%s).
+        docker build . --file Dockerfile --tag lab_image:$(date +%s).
