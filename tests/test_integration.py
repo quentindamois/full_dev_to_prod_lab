@@ -9,9 +9,11 @@ def flask_client():
     client = app.test_client()
     yield client
     try:
+        test_postgresql.stop()
+    except:
         if test_postgresql.child_process and test_postgresql.child_process.poll() is None:
             test_postgresql.child_process.terminate()
-            test_postgresql.child_process.wait(timeout=5)
+            test_postgresql.child_process.wait(timeout=20)
     finally:
         test_postgresql.cleanup()
     

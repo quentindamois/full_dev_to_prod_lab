@@ -24,9 +24,19 @@ def test_check_pasword():
     assert user.check_password("123password")
 
 def test__build_postgres_uri():
-    user = os.environ.get("POSTGRES_USER", "postgres")
-    password = os.environ.get("POSTGRES_PASSWORD", "postgres")
-    host = os.environ.get("POSTGRES_HOST", "localhost")
-    port = os.environ.get("POSTGRES_PORT", "5432")
-    name = os.environ.get("POSTGRES_DB", "taskmanager")
-    assert _build_postgres_uri() == f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{name}"
+
+    db_url = os.environ.get("DATABASE_URL")
+    
+    if len(db_url) == 0:
+        user = os.environ.get("POSTGRES_USER", "postgres")
+        password = os.environ.get("POSTGRES_PASSWORD", "postgres")
+        host = os.environ.get("POSTGRES_HOST", "localhost")
+        port = os.environ.get("POSTGRES_PORT", "5432")
+        name = os.environ.get("POSTGRES_DB", "taskmanager")
+        user = os.environ.get("POSTGRES_USER", "postgres")
+        password = os.environ.get("POSTGRES_PASSWORD", "postgres")
+        host = os.environ.get("POSTGRES_HOST", "localhost")
+        port = os.environ.get("POSTGRES_PORT", "5432")
+        name = os.environ.get("POSTGRES_DB", "taskmanager")
+        db_url = f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{name}"
+    assert _build_postgres_uri() == db_url
