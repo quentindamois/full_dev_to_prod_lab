@@ -1,0 +1,40 @@
+name: ci
+
+on:
+  pull_request:
+    branches:
+      - dev
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      DATABASE_URL: ${{secrets.DATABASE_URL}}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python version
+      uses: actions/setup-python@v5
+      with:
+          python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+    - name: check quality with ruff
+      run: |
+        ruff check app.py
+    - name: Test with pytest
+      run: |
+        pytest
+    - name: build Docker Image
+      run: |
+        run: docker build . --file Dockerfile --tag lab_image:$(date +%s).
